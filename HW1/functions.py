@@ -52,6 +52,9 @@ def splitData(data):
     money = re.findall(r'[$]+[0-9]+[.]*[0-9]*', text_info)
     for index in range(len(money)):
         money[index] = 'Money'
+
+    # questionmark = re.findall('', text_info)
+
     ans = words + money
     return ans
 
@@ -241,6 +244,7 @@ class bayes_classifier:
         self.voc_size = 0
         voc = set()
         for index, x in enumerate(data_x):
+            # print(x)
             for feature in x:
                 voc.add(feature)
             if data_y[index][0] == 0 and data_y[index][1] == 0:
@@ -276,11 +280,11 @@ class bayes_classifier:
                 log2((self.pt_feature_dict[feature] + 1) / (self.pt_voc + self.voc_size))
         self.save()
 
-    def get_score(self, word, feature_dict, voc_size):
+    def get_score(self, word, feature_dict, voc_size, voc_len):
         if word in feature_dict:
             return feature_dict[word]
         else:
-            return log2(1 / (voc_size + len(feature_dict)))
+            return log2(1 / (voc_size + voc_len))
 
     def test(self, features):
         # print(features)
@@ -291,10 +295,10 @@ class bayes_classifier:
         pt_score = log2(self.pt_size / (self.nd_size + self.nt_size + self.pd_size + self.pt_size))
 
         for feature in features:
-            nd_score += self.get_score(feature, self.nd_feature_dict, self.voc_size)
-            nt_score += self.get_score(feature, self.nt_feature_dict, self.voc_size)
-            pd_score += self.get_score(feature, self.pd_feature_dict, self.voc_size)
-            pt_score += self.get_score(feature, self.pt_feature_dict, self.voc_size)
+            nd_score += self.get_score(feature, self.nd_feature_dict, self.voc_size, self.nd_voc)
+            nt_score += self.get_score(feature, self.nt_feature_dict, self.voc_size, self.nt_voc)
+            pd_score += self.get_score(feature, self.pd_feature_dict, self.voc_size, self.pd_voc)
+            pt_score += self.get_score(feature, self.pt_feature_dict, self.voc_size, self.pt_voc)
         max_score = max(nd_score, nt_score, pd_score, pt_score)
         if max_score == nd_score:
             return 'deceptive negative'
