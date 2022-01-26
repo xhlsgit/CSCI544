@@ -45,6 +45,8 @@ def findPath(route, pn, td):
                 if second_file.find(td) > -1:
                     return os.path.join(second_dir, second_file)
 
+# useless info: ?, @
+
 def splitData(data):
     text_info = data
     text_info = text_info.lower()
@@ -53,9 +55,10 @@ def splitData(data):
     for index in range(len(money)):
         money[index] = 'Money'
 
-    # questionmark = re.findall('', text_info)
-
-    ans = words + money
+    exclamation = re.findall(r'[!]+', text_info)
+    # for index in range(len(exclamation)):
+    #     exclamation[index] = 'Exclamation'
+    ans = words + money + exclamation
     return ans
 
 
