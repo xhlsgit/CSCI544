@@ -72,6 +72,7 @@ def splitData(data):
 
 def remove_special_characters(data):
     stop_words = ['a', 'an', 'the', 'his', 'her', 'was', 'were', 'is', 'are', 'am']
+    # stop_words = []
     special_character = stop_words
 
     # special_character = []
