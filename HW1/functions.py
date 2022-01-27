@@ -4,6 +4,7 @@ import re
 import json
 from math import log2
 
+
 def readFiles(route):
     files = os.listdir(route)
     # print(files)
@@ -18,6 +19,7 @@ def readFiles(route):
             # if(len(lines) != 1):
             #     print(len(lines))
     return ans
+
 
 def readTrainData(route):
     data = []
@@ -45,97 +47,31 @@ def findPath(route, pn, td):
                 if second_file.find(td) > -1:
                     return os.path.join(second_dir, second_file)
 
+
 # useless info: ?, @, #, %, ...,
 
 def splitData(data):
     text_info = data
     text_info = text_info.lower()
     words = re.findall(r'\b[a-z]+[\']*[a-z]*\b', text_info)
-    # money = re.findall(r'[$]+[0-9]+[.]*[0-9]*', text_info)
-    # for index in range(len(money)):
-    #     money[index] = 'Money'
-    #
-    # exclamation = re.findall(r'[!]+', text_info)
-    # time = re.findall(r'[0-9][0-9][:][0-9][0-9]', text_info)
-    # for index in range(len(time)):
-    #     time[index] = 'Time'
-    # pm = re.findall(r'[p][.]*[m][.]*')
-    # for index in range(len(pm)):
-    #     pm[index] = 'pm'
-    # if len(pound) > 0:
+    money = re.findall(r'[$]+[0-9]+[.]*[0-9]*', text_info)
+    for index in range(len(money)):
+        money[index] = 'Money'
+
+    exclamation = re.findall(r'[!]+', text_info)
+    time = re.findall(r'[0-9][0-9][:][0-9][0-9]', text_info)
+    for index in range(len(time)):
+        time[index] = 'Time'
+    pm = re.findall(r'[--]+', text_info)
+    # if len(pm) > 0:
     #     print(text_info)
 
-    ans = words
+    ans = words + money + exclamation + time + pm
     return ans
 
 
-
-
 def remove_special_characters(data):
-
-    stop_words = ['getting', 'say', 'allows', 'greetings', 'seem', 'his', 'my', 'c', 'way', 'seems', 'tries', 'doesn',
-                  'provides', 'miss', 'whoever', 'value', 'whim', 'de', 'little', 'anywhere', 'formerly', 'recent',
-                  'or', 'act', 'both', 'nt', 'from', 'toward', 'despite', 'know', 'rm', 'here', 'your', 'los',
-                  'himself', 'using', 'anything', 'first', 'hotel', 'specifically', 'l', 'run', 'near', 'might',
-                  'second', 'jr', 'done', 'several', 'much', 'shed', 'room', 'knows', 'ex', 'other', 'let', 'hereupon',
-                  'a', 'myself', 'detail', 'fill', 'next', 'v', 'being', 'wish', 'others', 'do', 'believe', 'hi',
-                  'thereby', 'couldnt', 'pm', 'clearly', 'said', 'eg', 'almost', 'immediate', 'sixty', 'afterwards',
-                  'something', 've', 'especially', 'usefulness', 'sq', 'x', 's', 'thereupon', 'promptly', 'becomes',
-                  'wasn', 'right', 'says', 'welcome', 'au', 'serious', 'appropriate', 'saw', 'hundred', 'ny', 'etc',
-                  'dc', 'relatively', 'whole', 'kept', 'd', 'concerning', 'ps', 'more', 'm', 'by', 'hasn', 'dr',
-                  'followed', 'third', 'was', 'even', 'definitely', 'there', 'largely', 'trying', 'thorough', 'asking',
-                  'seeming', 'themselves', 'used', 'ever', 'ml', 'various', 'only', 'lo', 'hasnt', 'self', 'ip',
-                  'reasonably', 'thanks', 'tried', 'plus', 'mostly', 'cause', 'taking', 'primarily', 'an', 'resulting',
-                  'the', 'whatever', 'and', 'besides', 'come', 'while', 'else', 'these', 'hid', 'seen', 'consequently',
-                  'new', 'begin', 'resulted', 'doing', 'le', 'took', 'their', 'obtain', 'between', 'back', 'normally',
-                  'line', 'so', 'few', 'five', 'well', 'thank', 'why', 'http', 'latter', 'tends', 'h', 'sp', 'need',
-                  'p', 'par', 'vs', 'com', 'gives', 'husband', 'otherwise', 'course', 'don', 'previously', 'namely',
-                  'they', 'que', 'everywhere', 'won', 'ie', 'following', 'merely', 'seven', 'different', 'now', 'gave',
-                  'our', 'inc', 'approximately', 'haven', 'considering', 'find', 'related', 'what', 'above', 'em',
-                  'inner', 'four', 'yr', 'sure', 'too', 'show', 'after', 'looking', 'thats', 'in', 'us', 'interest',
-                  'slightly', 'are', 'got', 'possibly', 'dj', 'via', 'k', 'nevertheless', 'world', 'which', 'really',
-                  'looks', 'mrs', 'gotten', 'such', 'he', 'fire', 'whereas', 'regarding', 'alone', 'ltd', 'apparently',
-                  'truly', 'million', 'into', 'been', 'hers', 'contain', 'weren', 'twice', 'according', 'latterly',
-                  'usually', 'during', 'whither', 'added', 'currently', 'results', 'sf', 'to', 'se', 'changes',
-                  'research', 'this', 'similarly', 'potentially', 'shows', 'go', 'thoroughly', 'therefore', 'quickly',
-                  'everything', 'couldn', 'any', 'shown', 'many', 'make', 'hr', 'anyone', 'wants', 'al', 'ow',
-                  'together', 'ho', 'sup', 'put', 'least', 'pc', 'amongst', 'fify', 'came', 'affected', 'am', 'si',
-                  'however', 'forty', 'indicate', 'than', 'every', 'see', 'hereafter', 'll', 'throughout', 'wives',
-                  'wasnt', 'words', 'anyways', 'willing', 'elsewhere', 'when', 'somebody', 'ma', 'one', 'twelve',
-                  'then', 'e', 'herein', 'av', 'we', 'given', 'information', 'describe', 'for', 'g', 'look', 'pl',
-                  'til', 'everybody', 'having', 'nothing', 'seeing', 'who', 'nor', 'unlike', 'thickv', 'example',
-                  'known', 'although', 'among', 'sorry', 'instead', 'secondly', 'recently', 'if', 'q', 'pages', 'gone',
-                  'none', 'can', 'mean', 'cant', 'with', 'thence', 'thus', 'wi', 'possible', 'im', 'me', 'still',
-                  'beginning', 'shall', 'wouldnt', 'beyond', 'forth', 'because', 'whereafter', 'except', 'un', 'around',
-                  'associated', 'stop', 'towards', 'same', 'hello', 'those', 'whereby', 'brief', 'apart', 'within',
-                  'front', 'either', 'similar', 'anyway', 'yourselves', 'soon', 'o', 'up', 'theres', 'meanwhile',
-                  'three', 'everyone', 'anybody', 'through', 'uses', 'use', 'youre', 'allow', 'j', 'itself', 'give',
-                  'tv', 'didn', 'f', 'ad', 'due', 'indeed', 'seriously', 'necessary', 'some', 'sent', 'until',
-                  'wherein', 'furthermore', 'nd', 'moreover', 'significantly', 'appreciate', 'full', 'cry', 'wife',
-                  'means', 'own', 'proud', 'therein', 'unless', 'ask', 'consider', 'former', 'aside', 'once',
-                  'whereupon', 'effect', 'el', 'thru', 'fifth', 'had', 'significant', 'anyhow', 'may', 'th', 'able',
-                  'mr', 'taken', 'away', 'become', 'further', 'them', 'tell', 'nonetheless', 'per', 'la', 'under',
-                  'about', 'keeps', 'mainly', 'wifes', 'oj', 'wherever', 'have', 'makes', 'somehow', 'briefly',
-                  'nowhere', 'nearly', 'does', 'keep', 'went', 'against', 'saying', 'useful', 'lets', 'part',
-                  'accordingly', 'must', 'probably', 'below', 'il', 'another', 'is', 'needn', 'where', 'upon', 'st',
-                  'very', 'shouldn', 'regardless', 'co', 'theirs', 'thereafter', 'off', 'nobody', 'whether', 'seemed',
-                  'ours', 'did', 'most', 'mill', 'certainly', 'him', 'across', 'maybe', 'non', 'ten', 'thin', 'b',
-                  'she', 'sincere', 'ft', 'regards', 'beforehand', 'would', 'comes', 'entirely', 'ran', 'end', 'hadn',
-                  'will', 'please', 'oh', 're', 'all', 'outside', 'whence', 'like', 'old', 'though', 'i', 'n',
-                  'obtained', 'yours', 'hence', 'particular', 'strongly', 'goes', 'as', 'giving', 'ups', 'down',
-                  'could', 'bottom', 'noted', 'later', 'how', 'mine', 'described', 'rd', 'at', 'whose', 'move', 'since',
-                  'hereby', 'cd', 'but', 'name', 'onto', 'sub', 'help', 'someone', 'meantime', 'anymore', 'were',
-                  'date', 'w', 'going', 'wont', 'often', 'always', 'exactly', 'two', 'overall', 'that', 'of',
-                  'somewhat', 'indicated', 'made', 'certain', 'important', 'actually', 'appear', 'along', 'becoming',
-                  'again', 'happens', 'eight', 'ones', 'showed', 'you', 'system', 'uk', 'fi', 'lately', 'yourself',
-                  'obviously', 'hopefully', 'presumably', 'just', 'be', 'take', 'fix', 'isn', 'before', 'also', 'needs',
-                  'wonder', 'six', 'perhaps', 'enough', 'unfortunately', 'present', 'thereof', 'each', 'fl',
-                  'sometimes', 'out', 'found', 'already', 'its', 'twenty', 'ourselves', 'try', 'think', 'u', 'on',
-                  'herself', 'whom', 'side', 'eleven', 'lb', 'less', 'placed', 't', 'it', 'sometime', 'want', 'okay',
-                  'whenever', 'nine', 'yet', 'fifteen', 'les', 'necessarily', 'has', 'beside', 'amoungst', 'husbands',
-                  'get', 'became', 'section', 'ah', 'last', 'cannot', 'past', 'successfully', 'somewhere', 'never',
-                  'quite', 'ae', 'wouldn', 'gets', 'rather', 'indicates', 'should', 'mo', 'likely', 'behind',
-                  'immediately', 'her', 'arise', 'particularly', 'tip', 'ok', 'over']
+    stop_words = ['a', 'an', 'the', 'his', 'her', 'was', 'were', 'is', 'are', 'am']
     special_character = stop_words
 
     # special_character = []
@@ -154,10 +90,12 @@ def remove_special_characters(data):
         #     print(word)
     return processed_data
 
+
 def featurePreprocess(data):
     processed_data = splitData(data)
     processed_data = remove_special_characters(processed_data)
     return processed_data
+
 
 def preprocess(nd_files, nt_files, pd_files, pt_files):
     data_x = []
@@ -181,12 +119,14 @@ def preprocess(nd_files, nt_files, pd_files, pt_files):
     # print(data[0])
     return data_x, data_y
 
+
 def add_feature(dictation, features):
     for feature in features:
         if feature in dictation:
             dictation[feature] += 1
         else:
             dictation[feature] = 1
+
 
 class bayes_classifier:
     def __init__(self):
@@ -245,7 +185,6 @@ class bayes_classifier:
             self.nt_feature_dict = model['nt_feature_dict']
             self.pd_feature_dict = model['pd_feature_dict']
             self.pt_feature_dict = model['pt_feature_dict']
-
 
     def train(self, data_x, data_y):
         self.nd_voc = 0
@@ -321,11 +260,8 @@ class bayes_classifier:
             return 'truthful positive'
 
 
-
-
-
-def trainMain(nd_files, nt_files, pd_files, pt_files): # input:negative deceptive, negative truthful, positive deceptive, positive truthful
+def trainMain(nd_files, nt_files, pd_files,
+              pt_files):  # input:negative deceptive, negative truthful, positive deceptive, positive truthful
     data_x, data_y = preprocess(nd_files, nt_files, pd_files, pt_files)
     classifer = bayes_classifier()
     classifer.train(data_x, data_y)
-
